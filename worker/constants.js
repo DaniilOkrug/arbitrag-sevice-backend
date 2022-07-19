@@ -7,7 +7,7 @@ const payTypes = [
     "PostBankRussia",
     "ABank",
    //  "HomeCreditBank",
-    "MTSBank",
+   //  "MTSBank",
    //  "Payeer",
    //  "Advcash",
    //  "UralsibBank",
@@ -16,7 +16,7 @@ const payTypes = [
    //  "RenaissanceCredit",
    //  "CreditEuropeBank",
    //  "OTPBankRussia",
-    "CashInPerson",
+   //  "CashInPerson",
   ];
   
  const assets = ["USDT", "BTC", "BUSD", "BNB", "ETH"];
