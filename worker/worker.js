@@ -66,7 +66,7 @@ function getAdvertisersWithProfit() {
 
             const sellPrice = +sellCases.advs[0].adv.price;
 
-            const profitPercent = ((sellPrice - buyPrice) / buyPrice) * 100;
+            const profitPercent = ((sellPrice - buyPrice) / buyPrice) * 100 * 0.9996;
 
             if (profitPercent > 1) {
               result.push({
@@ -113,7 +113,7 @@ function getAdvertisersWithProfit() {
                   100;
               } else {
                 profitPercent =
-                  ((marketPrice * sellPrice - buyPrice) / buyPrice) * 100;
+                  ((marketPrice * sellPrice - buyPrice) / buyPrice) * 100 * 0.9996;
               }
 
               console.log(profitPercent);
