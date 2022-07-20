@@ -12,7 +12,7 @@ const payTypes = [
    //  "Advcash",
    //  "UralsibBank",
    //  "AkBarsBank",
-    "RussianStandardBank",
+   //  "RussianStandardBank",
    //  "RenaissanceCredit",
    //  "CreditEuropeBank",
    //  "OTPBankRussia",
