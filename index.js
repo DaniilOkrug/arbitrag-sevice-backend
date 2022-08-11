@@ -10,6 +10,11 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 app.use("/api", router);
+app.use(cors({
+  credentials: true,
+  origin: process.env.ORIGIN,
+  optionSuccessStatus: 200
+}));
 
 const server = http.createServer(app);
 const io = new Server(server, {
