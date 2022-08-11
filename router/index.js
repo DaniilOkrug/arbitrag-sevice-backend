@@ -7,7 +7,16 @@ const router = new Router();
 router.get("/", async (req, res) => {
   const response = await axios.get("http://178.20.43.144:5000/");
 
-  console.log(response.data);
+  res.setHeader("Access-Control-Allow-Origin", process.env.ORIGIN);
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", true);
 
   res.json(response.data);
 });
