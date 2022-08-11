@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
+const cors = require('cors');
 
 const router = require("./router/index");
 const BinanceP2PService = require("./worker/index");
