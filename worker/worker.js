@@ -1,6 +1,9 @@
+require("dotenv").config();
 const { parentPort } = require("worker_threads");
+const { default: mongoose } = require("mongoose");
 const axios = require("axios");
 const Binance = require("node-binance-api");
+
 const { assets, payTypes } = require("./constants");
 
 const binance = new Binance().options({
@@ -12,6 +15,11 @@ let isChecking = false;
 
 (async () => {
   try {
+    mongoose.connect(process.env.DB_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
     const advertisements = await getAdvertisersWithProfit();
     console.log(advertisements);
     parentPort.postMessage(JSON.stringify(advertisements));
@@ -66,7 +74,8 @@ function getAdvertisersWithProfit() {
 
             const sellPrice = +sellCases.advs[0].adv.price;
 
-            const profitPercent = ((sellPrice - buyPrice) / buyPrice) * 100 * 0.9996;
+            const profitPercent =
+              ((sellPrice - buyPrice) / buyPrice) * 100 * 0.9996;
 
             if (profitPercent > 1) {
               result.push({
@@ -74,11 +83,19 @@ function getAdvertisersWithProfit() {
                   asset: asset,
                   price: buyPrice,
                   payType: buyPayType,
+                  minAvailabelAmount:
+                    +buyCases.advs[i].adv.minSingleTransAmount,
+                  maxAvailableAmount:
+                    +buyCases.advs[i].adv.dynamicMaxSingleTransAmount,
                 },
                 sell: {
                   asset: asset,
                   price: sellPrice,
                   payType: sellPayType,
+                  minAvailabelAmount:
+                    +sellCases.advs[0].adv.minSingleTransAmount,
+                  maxAvailableAmount:
+                    +sellCases.advs[0].adv.dynamicMaxSingleTransAmount,
                 },
                 profit: profitPercent.toFixed(2),
               });
@@ -113,7 +130,9 @@ function getAdvertisersWithProfit() {
                   100;
               } else {
                 profitPercent =
-                  ((marketPrice * sellPrice - buyPrice) / buyPrice) * 100 * 0.9996;
+                  ((marketPrice * sellPrice - buyPrice) / buyPrice) *
+                  100 *
+                  0.9996;
               }
 
               console.log(profitPercent);
@@ -124,11 +143,20 @@ function getAdvertisersWithProfit() {
                     asset: asset,
                     price: buyPrice,
                     payType: buyPayType,
+                    minAvailabelAmount:
+                      +buyCases.advs[i].adv.minSingleTransAmount,
+                    maxAvailableAmount:
+                      +buyCases.advs[i].adv.dynamicMaxSingleTransAmount,
                   },
                   sell: {
                     asset: marketBuyAsset,
                     price: sellPrice,
                     payType: sellPayType,
+                    minAvailabelAmount:
+                      +sellCases.advs[0].adv.minSingleTransAmount,
+                    maxAvailableAmount:
+                      +sellCases.advs[0].adv.dynamicMaxSingleTransAmount,
+                    marketPrice,
                   },
                   profit: profitPercent.toFixed(2),
                 });
