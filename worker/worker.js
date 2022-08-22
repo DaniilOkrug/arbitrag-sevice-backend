@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { parentPort } = require("worker_threads");
 const { default: mongoose } = require("mongoose");
+const coinPriceModel = require("../models/coinPrice.model");
 const axios = require("axios");
 const Binance = require("node-binance-api");
 
@@ -46,6 +47,7 @@ function getAdvertisersWithProfit() {
     const result = [];
 
     const buyAdvertisers = await getAdvertisers("BUY");
+    const timestamp = Date.now();
     console.log(buyAdvertisers);
     if (!buyAdvertisers) return resolve;
 
@@ -59,6 +61,15 @@ function getAdvertisersWithProfit() {
 
         for (let i = 0; i < buyCases.advs.length; i++) {
           const buyPrice = +buyCases.advs[i].adv.price;
+
+          if (i === 0) {
+            await coinPriceModel.create({
+              coin: asset,
+              buyType: buyPayType,
+              price: buyPrice,
+              timestamp,
+            });
+          }
 
           for (const sellPayType of payTypes) {
             if (buyPayType === sellPayType) continue;
@@ -77,7 +88,7 @@ function getAdvertisersWithProfit() {
             const profitPercent =
               ((sellPrice - buyPrice) / buyPrice) * 100 * 0.9996;
 
-            if (profitPercent > 1) {
+            if (profitPercent > 0.1) {
               result.push({
                 buy: {
                   asset: asset,
@@ -137,7 +148,7 @@ function getAdvertisersWithProfit() {
 
               console.log(profitPercent);
 
-              if (profitPercent >= 1) {
+              if (profitPercent >= 0.1) {
                 result.push({
                   buy: {
                     asset: asset,
