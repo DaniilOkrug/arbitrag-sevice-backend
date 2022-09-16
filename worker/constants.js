@@ -1,7 +1,7 @@
 const payTypes = [
-    "Tinkoff",
+    "TinkoffNew",
     "RosBank",
-    "RaiffeisenBankRussia",
+    "RaiffeisenBank",
     "QIWI",
     "YandexMoney",
     "PostBankRussia",
